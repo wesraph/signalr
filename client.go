@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"os"
+	"io/ioutil"
 	"reflect"
 	"sync"
 	"sync/atomic"
@@ -112,7 +112,7 @@ var ErrUnableToConnect = errors.New("neither WithConnection nor WithConnector op
 // NewClient builds a new Client.
 // When ctx is canceled, the client loop and a possible auto reconnect loop are ended.
 func NewClient(ctx context.Context, options ...func(Party) error) (Client, error) {
-	info, dbg := buildInfoDebugLogger(log.NewLogfmtLogger(os.Stderr), true)
+	info, dbg := buildInfoDebugLogger(log.NewLogfmtLogger(ioutil.Discard), true)
 	c := &client{
 		state:            ClientCreated,
 		stateChangeChans: make([]chan ClientState, 0),
